@@ -1,9 +1,9 @@
 USE Universidad;
 
 -- 1. Returns a list with (surname 1 + surname 2 + name) of all the students. The list must be ordered alphabetically from lowest to highest by surname 1, surname 2 and name.
-SELECT apellido1 AS 'Surname 1', apellido2 AS 'Surname 2', nombre AS 'Student name' FROM persona ORDER BY apellido1, apellido2, nombre;
+SELECT apellido1 AS 'Surname 1', apellido2 AS 'Surname 2', nombre AS 'Student name' FROM persona WHERE tipo = 'alumno' ORDER BY apellido1, apellido2, nombre;
 
--- 2. Fins the first and last names of students who haven't registered their phone number in the database.
+-- 2. Finds the first and last names of students who haven't registered their phone number in the database.
 SELECT nombre AS 'Name', apellido1 AS 'Surname 1', apellido2 AS 'Surname 2' FROM persona WHERE telefono IS NULL;
 
 -- 3. Returns the list of students who were born in 1999.
@@ -44,7 +44,7 @@ SELECT p.* FROM persona p LEFT OUTER JOIN profesor pr ON p.id = pr.id_profesor L
 SELECT a.* FROM asignatura a LEFT OUTER JOIN profesor pr ON a.id_profesor = pr.id_profesor WHERE a.id_profesor IS NULL; 
 
 -- 6. Returns a list of all departments that haven't taught subjects in any university year.
-SELECT DISTINCT d.* FROM departamento d LEFT OUTER JOIN profesor pr ON d.id = pr.id_departamento LEFT OUTER JOIN asignatura a ON pr.id_profesor = a.id_profesor WHERE a.curso IS NULL; 
+SELECT DISTINCT d.* FROM departamento d LEFT OUTER JOIN profesor pr ON d.id = pr.id_departamento LEFT OUTER JOIN asignatura a ON pr.id_profesor = a.id_profesor WHERE pr.id_departamento IS NULL; 
 
 /* SUMMARY QUERIES*/
 -- 1. Returns the total number of students there.
@@ -69,7 +69,7 @@ SELECT DISTINCT g.nombre AS 'Grade name', COUNT(a.nombre) AS "Number of subjects
 SELECT g.nombre AS 'Grade name', a.tipo AS "Subject type", SUM(a.creditos) AS 'Number of credits' FROM grado g INNER JOIN asignatura a ON g.id = a.id_grado GROUP BY a.tipo, g.nombre; 
 
 -- 8. Returns a list that shows how many students have enrolled in a subject in each of the school years. The result must show two columns, one column with the start year of the school year and another with the number of enrolled students.
-SELECT c.anyo_inicio AS "Course start year", COUNT(am.id_alumno) AS "Number of enrolled students" FROM curso_escolar c LEFT OUTER JOIN alumno_se_matricula_asignatura am ON am.id_curso_escolar = c.id LEFT OUTER JOIN asignatura a ON a.id = am.id_asignatura GROUP BY c.anyo_inicio; 
+SELECT c.anyo_inicio AS "Course start year", COUNT(am.id_alumno) AS "Number of enrolled students" FROM curso_escolar c LEFT OUTER JOIN alumno_se_matricula_asignatura am ON am.id_curso_escolar = c.id GROUP BY c.anyo_inicio; 
 
 -- 9. Returns a list with the number of subjects taught by each teacher. The list must take into account those professors who do not teach any subjects. The result will show five columns: id, name, first last name, second last name and number of subjects. The result will be ordered from highest to lowest by the number of subjects.
 SELECT p.id AS 'ID teacher', p.nombre AS 'Name', p.apellido1 AS 'Surname 1', p.apellido2 AS 'Surname 2', COUNT(a.nombre) AS "Number of subjects" FROM persona p LEFT OUTER JOIN profesor pr ON p.id = pr.id_profesor LEFT OUTER JOIN asignatura a ON a.id_profesor = pr.id_profesor WHERE p.tipo = 'profesor' GROUP BY p.id ORDER BY COUNT(a.nombre) DESC; 
@@ -77,5 +77,5 @@ SELECT p.id AS 'ID teacher', p.nombre AS 'Name', p.apellido1 AS 'Surname 1', p.a
 -- 10. Returns all data for the youngest student.
 SELECT * FROM persona p WHERE p.tipo = 'alumno' AND p.fecha_nacimiento = (SELECT MAX(p.fecha_nacimiento) FROM persona p);
 
--- 11. Returns a list of professors who have an associated department and who do not teach any subjects.
+-- 11. Returns a list of professors who have an associated department and who don't teach any subjects.
 SELECT pr.* FROM profesor pr LEFT OUTER JOIN asignatura a ON pr.id_profesor = a.id_profesor WHERE pr.id_departamento IS NOT NULL AND a.id_profesor IS NULL;
