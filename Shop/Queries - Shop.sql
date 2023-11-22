@@ -76,15 +76,15 @@ SELECT p.nombre AS Product_name, p.precio AS Product_price, f.nombre AS Manufact
 SELECT p.nombre AS Product_name, p.precio AS Product_price, f.nombre AS Manufacturer_name FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo ORDER BY p.precio DESC LIMIT 1;
 
 -- 26. Returns a list of all products from manufacturer LENOVO:
-SELECT * FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo';
+SELECT p.* FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo';
 
 -- 27. Returns a list of all products from manufacturer CRUCIAL that (price < 200€):
-SELECT * FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Crucial' && p.precio > 200;
+SELECT p.* FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Crucial' && p.precio > 200;
 
--- 28. Resturns a list with all products from manufacturers (Asus, Hewlett-Packard & Seagate), without using the IN operator:
-SELECT * FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Asus' OR f.nombre = 'Hewlett-Packard' OR f.nombre = 'Seagate';
+-- 28. Returns a list with all products from manufacturers (Asus, Hewlett-Packard & Seagate), without using the IN operator:
+SELECT p.* FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Asus' OR f.nombre = 'Hewlett-Packard' OR f.nombre = 'Seagate';
 
--- 29. Resturns a list with all products from manufacturers (Asus, Hewlett-Packard & Seagate), using the IN operator:
+-- 29. Returns a list with all products from manufacturers (Asus, Hewlett-Packard & Seagate), using the IN operator:
 SELECT * FROM producto INNER JOIN fabricante ON codigo_fabricante = fabricante.codigo WHERE fabricante.nombre IN ('Asus', 'Hewlett-Packard', 'Seagate');
 
 -- 30. Returns a list with name + price of all products  where manufacturers name ends with 'e':
@@ -103,13 +103,13 @@ SELECT DISTINCT f.codigo AS Manufacturer_code, f.nombre AS Manufacturer_name FRO
 SELECT * FROM fabricante f LEFT OUTER JOIN producto p ON f.codigo = codigo_fabricante;
 
 -- 35. Returns a list showing only those manufacturers that don't have products:
-SELECT * FROM fabricante f LEFT OUTER JOIN producto p ON f.codigo = codigo_fabricante WHERE codigo_fabricante IS NULL;
+SELECT f.* FROM fabricante f LEFT OUTER JOIN producto p ON f.codigo = codigo_fabricante WHERE codigo_fabricante IS NULL;
 
 -- 36. Returns all products from the manufacturer LENOVO (without using INNER JOIN):
-SELECT * FROM producto p LEFT OUTER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo';
+SELECT p.* FROM producto p LEFT OUTER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo';
 
 -- 37. Returns all products that have the same price as the most expensive product from manufacturer LENOVO (without using INNER JOIN):
-SELECT * FROM producto p LEFT OUTER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE p.precio = (SELECT MAX(p.precio) FROM producto p LEFT OUTER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo');
+SELECT p.* FROM producto p LEFT OUTER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE p.precio = (SELECT MAX(p.precio) FROM producto p LEFT OUTER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo');
 
 -- 38. List the name of the most expensive product from the manufacturer LENOVO:
 SELECT p.nombre AS Product_name FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE p.precio = (SELECT MAX(p.precio) FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo');
@@ -121,7 +121,7 @@ SELECT p.nombre AS Product_name FROM producto p INNER JOIN fabricante f ON codig
 SELECT p.nombre AS Product_name FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE p.precio >= (SELECT MAX(p.precio) FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Lenovo');
 
 -- 41. List all products from manufacturer ASUS that have price > the average price of all their products:
-SELECT * FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE p.precio > (SELECT AVG(p.precio) FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Asus') AND f.nombre = 'Asus';
+SELECT p.* FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE p.precio > (SELECT AVG(p.precio) FROM producto p INNER JOIN fabricante f ON codigo_fabricante = f.codigo WHERE f.nombre = 'Asus') AND f.nombre = 'Asus';
 
 
 
